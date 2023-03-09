@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07e1bcbe-368b-4910-b0b1-4cba39cf2b10" name="Changes" comment="Added exceptions files and interfaces given in project spec" />
+    <list default="true" id="07e1bcbe-368b-4910-b0b1-4cba39cf2b10" name="Changes" comment="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,7 +26,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2Mf4meNno06CnRYuYyvtHKBXJLc" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -75,7 +77,21 @@
       <option name="project" value="LOCAL" />
       <updated>1678147726721</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
+      <created>1678148064052</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1678148064052</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
+      <created>1678148168187</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1678148168187</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -104,6 +120,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
     <MESSAGE value="Added exceptions files and interfaces given in project spec" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added exceptions files and interfaces given in project spec" />
+    <MESSAGE value="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)" />
   </component>
 </project>
