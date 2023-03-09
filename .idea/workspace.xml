@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07e1bcbe-368b-4910-b0b1-4cba39cf2b10" name="Changes" comment="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/socialmedia/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/socialmedia/MiniSocialMedia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/MiniSocialMedia.java" afterDir="false" />
-    </list>
+    <list default="true" id="07e1bcbe-368b-4910-b0b1-4cba39cf2b10" name="Changes" comment="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678375430078</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
+      <created>1678377767571</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1678377767571</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -121,7 +124,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>

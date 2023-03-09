@@ -19,6 +19,8 @@ public class MiniSocialMedia {
         {
             throw new InvalidHandleException("Handle invalid. Please make sure it has less than 30 characters, no white spaces and is not empty.");
         }
+
+        Account account = new Account(handle);
         profiles.add(account);
         return account.getId();
     }
