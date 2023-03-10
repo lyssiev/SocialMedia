@@ -1,6 +1,4 @@
 package socialmedia;
-import java.io.IOException;
-import socialmedia.Account;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -26,6 +24,7 @@ public class SocialMedia extends SocialMediaPlatform {
         profiles.add(account);
         return account.getId();
     }
+
     public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
 
         for (Account profile : profiles) {

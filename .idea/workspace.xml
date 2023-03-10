@@ -120,7 +120,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678377986365</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
+      <created>1678379954847</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1678379954847</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
