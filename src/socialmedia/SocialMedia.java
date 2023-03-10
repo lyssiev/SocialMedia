@@ -2,7 +2,8 @@ package socialmedia;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class SocialMedia extends SocialMediaPlatform {
+//TODO: make sure fits with java naming conventions
+public class SocialMedia implements SocialMediaPlatform {
 
     ArrayList<Account> profiles = new ArrayList<Account>();
 
@@ -80,5 +81,63 @@ public class SocialMedia extends SocialMediaPlatform {
         }
 
     }
+
+    @Override
+    public void changeAccountHandle(String oldHandle, String newHandle)
+            throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
+
+        boolean found = false;
+        Account accountToChange = null;
+        for (Account profile : profiles) {
+            if (Objects.equals(profile.getHandle(), oldHandle)) {
+                found = true;
+                accountToChange = profile;
+            }
+            if (Objects.equals(profile.getHandle(), newHandle)) {
+                throw new IllegalHandleException("Sorry, that handle is already in use.");
+            }
+        }
+
+        if (!found)
+        {
+            throw new HandleNotRecognisedException("Sorry, that is not a recognised handle.");
+        }
+        else if (newHandle.length() > 30 || newHandle.contains(" ") || newHandle == null) {
+            throw new InvalidHandleException("Handle invalid. Please make sure it has less than 30 characters, no white spaces and is not empty.");
+        }
+        else {
+            accountToChange.setHandle(newHandle);
+        }
+
+
+    }
+
+    @Override
+    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
+        boolean found = false;
+        Account accountToChange = null;
+        for (Account profile : profiles) {
+            if (Objects.equals(profile.getHandle(), oldHandle)) {
+                found = true;
+                accountToChange = profile;
+            }
+        }
+        if (!found)
+        {
+            throw new HandleNotRecognisedException("Sorry, that handle is not recognised.");
+        }
+        accountToChange.setDescription(description);
+
+    }
+
+    @Override
+    public String showAccount(String handle) throws HandleNotRecognisedException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+
+
 
 }
