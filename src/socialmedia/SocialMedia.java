@@ -115,7 +115,7 @@ public class SocialMedia implements SocialMediaPlatform {
         boolean found = false;
         Account accountToChange = null;
         for (Account profile : profiles) {
-            if (Objects.equals(profile.getHandle(), oldHandle)) {
+            if (Objects.equals(profile.getHandle(), handle)) {
                 found = true;
                 accountToChange = profile;
             }
