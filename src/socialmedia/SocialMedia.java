@@ -36,7 +36,6 @@ public class SocialMedia implements SocialMediaPlatform {
         if (handle.length() > 30 || handle.contains(" ") || handle == null) {
             throw new InvalidHandleException("Handle invalid. Please make sure it has less than 30 characters, no white spaces and is not empty.");
         }
-
         Account account = new Account(handle, description);
         profiles.add(account);
         return account.getId();
@@ -50,7 +49,6 @@ public class SocialMedia implements SocialMediaPlatform {
                 accountToDelete = profile;
             }
         }
-
         if (!found)
         {
             throw new AccountIDNotRecognisedException("Sorry, the account ID is invalid.");
