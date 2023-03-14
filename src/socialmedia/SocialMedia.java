@@ -1,4 +1,5 @@
 package socialmedia;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -131,10 +132,62 @@ public class SocialMedia implements SocialMediaPlatform {
     @Override
     public String showAccount(String handle) throws HandleNotRecognisedException {
         // TODO Auto-generated method stub
-        return null;
+
+        boolean found = false;
+        Account account = null;
+
+            {
+                for (Account profile : profiles) {
+                    if (Objects.equals(profile.getHandle(), (handle))){
+                        found = true;
+                        account = profile;
+                    }
+                    if(found == false){
+                        throw new HandleNotRecognisedException("Sorry, that handle is not found.");
+                    }
+            }
+
+          // TODO:  do endorse and comment counts
+                // int postCount = profiles.getPosts().size();
+            int endorseCount = 0;
+            for (Post post : profiles.getPosts()) {
+                endorseCount += post.getEndorsements().size();
+            }
+
+            String template = "<pre>ID:" +
+                              " %d\nHandle: %s\nDescription: %s\nPost count: %d\nEndorse count: %d\n</pre>";
+            return String.format(template, account.getId(), account.getHandle(), account.getDescription(), postCount, endorseCount);
+        }
+
     }
 
+    public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
+        boolean found = false;
+        Account account = null;
 
+        if (Objects.equals(message, "") || message.length() > 100)
+        {
+            throw new InvalidPostException("Sorry, the post is invalid. Make sure it is not empty or does not have more than 100 characters.");
+        }
+
+        for (Account profile : profiles) {
+            if (Objects.equals(profile.getHandle(), (handle))) {
+                found = true;
+                account = profile;
+
+            }
+        }
+
+        if (!found) {
+
+            throw new HandleNotRecognisedException("Sorry, that handle is not found.");
+        }
+
+        Post newPost = new Post(handle, message);
+        account.addPost(newPost);
+        return account.getId();
+
+    }
 
 
 

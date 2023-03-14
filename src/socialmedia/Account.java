@@ -1,10 +1,14 @@
 package socialmedia;
 
+import java.util.ArrayList;
+
 public class Account {
     private static int latestId = 0;
-    private int id;
+    private final int id;
     private String handle;
     private String description;
+
+    private ArrayList<Post> posts;
 
     public Account(String handle) {
         this.id = ++latestId;
@@ -34,6 +38,10 @@ public class Account {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void addPost(Post post){
+        posts.add(post);
     }
 
 }
