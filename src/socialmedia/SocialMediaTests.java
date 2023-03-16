@@ -10,26 +10,20 @@ public class SocialMediaTests {
         testStringBuilderThing();
     }
 
-    public static void testStringBuilderThing() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
-        SocialMedia platform = new SocialMedia();
-        platform.createAccount("lyssie");
-        platform.createPost("lyssie", "this is my test!");
-        platform.createAccount("shannyn");
-        platform.commentPost("shannyn", 0, "this is my attempt to comment!");
-        platform.commentPost("lyssie", 0, "this is my attempt to comment twice!");
-        platform.commentPost("lyssie", 1, "this is my attempt to comment on my first comment!");
-        platform.createPost("lyssie", "this is my test 2!");
-       // System.out.println(platform.showIndividualPost(0));
-        System.out.println(platform.showPostChildrenDetails(0));
+    public static void createAccountTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
+        SocialMediaPlatform platform = new SocialMediaPlatform();
+          String handle = "John ";
+          String description = "This is my social media ";
+            int accountId = platform.createAccount(handle, description);
 
-        System.out.println(platform.getTotalOriginalPosts());
+            // Assert that account ID is greater than zero
+            assertTrue(accountId > 0);
 
-        platform.savePlatform("a.ser");
+            // Assert that the account was created with the correct handle and description
+            SocialMediaAccount account = platform.getAccount(accountId);
+            assertEquals(handle, account.getHandle());
+            assertEquals(description, account.getDescription());
 
-        platform.erasePlatform();
-        System.out.println(platform.getTotalOriginalPosts());
-        platform.loadPlatform("a.ser");
-        System.out.println(platform.getTotalOriginalPosts());
 
     }
 
