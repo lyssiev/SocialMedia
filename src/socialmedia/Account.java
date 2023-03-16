@@ -1,6 +1,7 @@
 package socialmedia;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Account {
     private static int latestId = 0;
@@ -8,7 +9,6 @@ public class Account {
     private String handle;
     private String description;
 
-    private ArrayList<Post> posts;
 
     public Account(String handle) {
         this.id = ++latestId;
@@ -40,8 +40,32 @@ public class Account {
         this.description = description;
     }
 
-    public void addPost(Post post){
-        posts.add(post);
+    public ArrayList<Post> getPosts()
+    {
+        ArrayList<Post> posts = new ArrayList<>();
+        for (Post post: SocialMedia.posts)
+        {
+            if (Objects.equals(post.getHandle(), handle))
+            {
+                posts.add(post);
+            }
+
+        }
+        return posts;
+    }
+
+    public int getNumberOfEndorsements()
+    {
+        int total = 0;
+        for (Post post: SocialMedia.posts)
+        {
+            if (Objects.equals(post.getHandle(), handle))
+            {
+                total = total + post.getNumberOfEndorsements();
+            }
+
+        }
+        return total;
     }
 
 }

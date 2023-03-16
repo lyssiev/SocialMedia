@@ -1,12 +1,15 @@
 package socialmedia;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 
 //TODO: make sure fits with java naming conventions
+//TODO: write 30 tests
 public class SocialMedia implements SocialMediaPlatform {
 
-    ArrayList<Account> profiles = new ArrayList<Account>();
+    public static ArrayList<Account> profiles = new ArrayList<>();
+    public static ArrayList<Post> posts = new ArrayList<>();
 
     @Override
     public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
@@ -27,6 +30,7 @@ public class SocialMedia implements SocialMediaPlatform {
         return account.getId();
     }
 
+    @Override
     public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
 
         for (Account profile : profiles) {
@@ -41,6 +45,7 @@ public class SocialMedia implements SocialMediaPlatform {
         profiles.add(account);
         return account.getId();
     }
+    @Override
     public void removeAccount(int id) throws AccountIDNotRecognisedException {
        boolean found = false;
        Account accountToDelete = null;
@@ -131,36 +136,25 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public String showAccount(String handle) throws HandleNotRecognisedException {
-        // TODO Auto-generated method stub
 
         boolean found = false;
         Account account = null;
+            for (Account profile : profiles) {
+                if (Objects.equals(profile.getHandle(), (handle))) {
+                    found = true;
+                    account = profile;
+                }
 
-            {
-                for (Account profile : profiles) {
-                    if (Objects.equals(profile.getHandle(), (handle))){
-                        found = true;
-                        account = profile;
-                    }
-                    if(found == false){
-                        throw new HandleNotRecognisedException("Sorry, that handle is not found.");
-                    }
             }
 
-          // TODO:  do endorse and comment counts
-                // int postCount = profiles.getPosts().size();
-            int endorseCount = 0;
-            for (Post post : profiles.getPosts()) {
-                endorseCount += post.getEndorsements().size();
-            }
-
-            String template = "<pre>ID:" +
-                              " %d\nHandle: %s\nDescription: %s\nPost count: %d\nEndorse count: %d\n</pre>";
-            return String.format(template, account.getId(), account.getHandle(), account.getDescription(), postCount, endorseCount);
+        if (!found) {
+            throw new HandleNotRecognisedException("Sorry, that handle is not found.");
         }
 
-    }
+        return "ID: \nHandle:" + account.getHandle() + " \nDescription:" + account.getDescription() + "\nPost count: " + (account.getPosts()).size() + "\nEndorse count:" + account.getNumberOfEndorsements();
 
+    }
+@Override
     public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
         boolean found = false;
         Account account = null;
@@ -184,11 +178,240 @@ public class SocialMedia implements SocialMediaPlatform {
         }
 
         Post newPost = new Post(handle, message);
-        account.addPost(newPost);
+        posts.add(newPost);
         return account.getId();
 
     }
 
+    @Override
+    public int endorsePost(String handle, int id) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException {
+        Account account = null;
+        boolean found = false;
+        for (Account profile : profiles) {
+            if (Objects.equals(profile.getHandle(), (handle))) {
+                found = true;
+                account = profile;
+            }
+        }
+        if (!found) {
 
+            throw new HandleNotRecognisedException("Sorry, that handle is not found.");
+        }
+
+        Post postToEndorse = null;
+        boolean postFound = false;
+        for (Post post : account.getPosts()) {
+            if (Objects.equals(post.getPostId(), id)) {
+                if (post instanceof Endorsement) {
+                    throw new NotActionablePostException("Endorsement posts are not endorsable.");
+                }
+                postFound = true;
+                postToEndorse = post;
+            }
+        }
+        if(!postFound){
+            throw new PostIDNotRecognisedException("There is no post with that id.");
+        }
+        String message = "EP@" + handle + ": " + postToEndorse.getMessage();
+        Endorsement newEndorsement = new Endorsement(handle, message, postToEndorse.getPostId());
+        postToEndorse.addEndorsement(newEndorsement);
+
+        return newEndorsement.getPostId();
+    }
+
+    @Override
+    public int commentPost(String handle, int id, String message) throws HandleNotRecognisedException,
+            PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
+        if (Objects.equals(message, "") || message.length() > 100)
+        {
+            throw new InvalidPostException("Sorry, the post is invalid. Make sure it is not empty or does not have more than 100 characters.");
+        }
+
+        Account account = null;
+        boolean found = false;
+        for (Account profile : profiles) {
+            if (Objects.equals(profile.getHandle(), (handle))) {
+                found = true;
+                account = profile;
+            }
+        }
+        if (!found) {
+
+            throw new HandleNotRecognisedException("Sorry, that handle is not found.");
+        }
+        Post postToComment = null;
+        boolean postFound = false;
+        for (Post post : posts) {
+            if (Objects.equals(post.getPostId(), id)) {
+                if (post instanceof Endorsement) {
+                    throw new NotActionablePostException("Endorsement posts are not able to be commented.");
+                }
+                postFound = true;
+                postToComment = post;
+            }
+        }
+        if(!postFound){
+            throw new PostIDNotRecognisedException("There is no post with that id.");
+        }
+
+        Comment newComment = new Comment(handle, postToComment.getPostId(), message);
+        postToComment.addComment(newComment);
+        posts.add(newComment);
+        return newComment.getPostId();
+    }
+
+    @Override
+    public void deletePost(int id) throws PostIDNotRecognisedException {
+        boolean found = false;
+        for (Post post : posts)
+        {
+            if (post.getPostId() == id)
+            {
+                posts.remove(post);
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            throw new PostIDNotRecognisedException("There is no post with that id to delete.");
+        }
+    }
+
+    @Override
+    public String showIndividualPost(int id) throws PostIDNotRecognisedException {
+        Post postToShow = null;
+        for (Post post : posts)
+        {
+            if (post.getPostId() == id)
+            {
+                postToShow = post;
+            }
+        }
+        if (postToShow == null)
+        {
+            throw new PostIDNotRecognisedException("There is no post with that ID to show.");
+        }
+        return "ID: " + postToShow.getPostId() + "\nAccount: " + postToShow.getHandle() + "\nNo. of Endorsements: " + postToShow.getNumberOfEndorsements() + "| No. of Comments: " + postToShow.getNumberOfComments() + "\n" + postToShow.getMessage();
+    }
+
+    @Override
+    public StringBuilder showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
+        StringBuilder sb = new StringBuilder();
+        Post postToShow = null;
+        for (Post post : posts) {
+            if (post.getPostId() == id) {
+                postToShow = post;
+                break;
+            }
+        }
+        if (postToShow == null) {
+            throw new PostIDNotRecognisedException("There is no post with that ID to show.");
+        }
+        if (postToShow instanceof Endorsement) {
+            throw new NotActionablePostException("Endorsement posts do not have children.");
+        }
+        sb.append(String.format("ID: %d\n", postToShow.getPostId()));
+        sb.append(String.format("Account: %s\n", postToShow.getHandle()));
+        sb.append(String.format("No. of Endorsements: %d | No. of Comments: %d\n", postToShow.getEndorsements().size(), postToShow.getComments().size()));
+        sb.append(String.format("%s\n", postToShow.getMessage()));
+        List<Comment> comments = postToShow.getComments();
+        if (!comments.isEmpty()) {
+            for (Comment reply : comments) {
+                sb.append(String.format("\t|\n\t> ID: %d\n", reply.getPostId()));
+                sb.append(String.format("\t\tAccount: %s\n", reply.getHandle()));
+                sb.append(String.format("\t\tNo. of Endorsements: %d | No. of Comments: %d\n", reply.getEndorsements().size(), reply.getComments().size()));
+                sb.append(String.format("\t\t%s\n", reply.getMessage()));
+                List<Comment> children = reply.getComments();
+                if (!children.isEmpty()) {
+                    sb.append(showPostChildrenDetails(reply.getPostId()).insert(0, "\t"));
+                }
+            }
+        }
+        return sb;
+    }
+
+
+
+    @Override
+    public int getNumberOfAccounts() {
+       return profiles.size();
+    }
+
+    @Override
+    public int getTotalOriginalPosts() {
+        int total = 0;
+        for (Post post : posts)
+        {
+            if (post instanceof Endorsement || post instanceof Comment)
+            {
+                total = total + 1;
+            }
+        }
+        return posts.size() - total;
+    }
+
+    @Override
+    public int getTotalEndorsmentPosts() {
+        int total = 0;
+        for (Post post : posts)
+        {
+            total = total + post.getNumberOfEndorsements();
+        }
+        return total;
+    }
+
+    @Override
+    public int getTotalCommentPosts() {
+        int total = 0;
+        for (Post post : posts)
+        {
+            total = total + post.getNumberOfComments();
+        }
+        return total;
+    }
+
+    @Override
+    public int getMostEndorsedPost() {
+        int id = 0;
+        for (Post post : posts)
+        {
+            if (post.getPostId() > id)
+            {
+                id = post.getPostId();
+            }
+        }
+        return id;
+    }
+
+    @Override
+    public int getMostEndorsedAccount() {
+        int id = 0;
+        for (Account profile : profiles)
+        {
+            if (profile.getNumberOfEndorsements() > id)
+            {
+                id = profile.getNumberOfEndorsements();
+            }
+        }
+        return id;
+    }
+
+    @Override
+    public void erasePlatform() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void savePlatform(String filename) throws IOException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
+        // TODO Auto-generated method stub
+
+    }
 
 }

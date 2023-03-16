@@ -43,4 +43,14 @@ public class Post {
     public void addEndorsement(Endorsement endorsement) {
         endorsements.add(endorsement);
     }
+
+    public int getNumberOfEndorsements()
+    {
+        return endorsements.size();
+    }
+
+    public int getNumberOfComments()
+    {
+        return comments.size();
+    }
 }
