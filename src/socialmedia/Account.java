@@ -1,9 +1,10 @@
 package socialmedia;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Account {
+public class Account implements Serializable {
     private static int latestId = 0;
     private final int id;
     private String handle;

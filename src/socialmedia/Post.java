@@ -1,6 +1,7 @@
 package socialmedia;
+import java.io.Serializable;
 import java.util.ArrayList;
-public class Post {
+public class Post implements Serializable {
     private static int nextPostId = 0; // static variable to keep track of the next post id
     private final int postId; // unique numerical identifier for this post
     private final String handle;// the account that posted this post

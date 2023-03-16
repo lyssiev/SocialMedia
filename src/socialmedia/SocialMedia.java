@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 //TODO: make sure fits with java naming conventions
 //TODO: write 30 tests
@@ -230,16 +231,13 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new InvalidPostException("Sorry, the post is invalid. Make sure it is not empty or does not have more than 100 characters.");
         }
 
-        Account account = null;
         boolean found = false;
         for (Account profile : profiles) {
             if (Objects.equals(profile.getHandle(), (handle))) {
                 found = true;
-                account = profile;
             }
         }
         if (!found) {
-
             throw new HandleNotRecognisedException("Sorry, that handle is not found.");
         }
         Post postToComment = null;
@@ -419,8 +417,14 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
-        // TODO Auto-generated method stub
-
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            profiles = (ArrayList<Account>) ois.readObject();
+            posts = (ArrayList<Post>) ois.readObject();
+        } catch (IOException e) {
+            throw new IOException("Error reading file.", e);
+        } catch (ClassNotFoundException e) {
+            throw new ClassNotFoundException("Class not found when loading file.", e);
+        }
     }
 
 }
