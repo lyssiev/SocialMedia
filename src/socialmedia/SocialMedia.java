@@ -220,6 +220,7 @@ public class SocialMedia implements SocialMediaPlatform {
         Endorsement newEndorsement = new Endorsement(handle, message, postToEndorse.getPostId());
         postToEndorse.addEndorsement(newEndorsement);
 
+        posts.add(newEndorsement);
         return newEndorsement.getPostId();
     }
 
@@ -295,9 +296,8 @@ public class SocialMedia implements SocialMediaPlatform {
         return "ID: " + postToShow.getPostId() + "\nAccount: " + postToShow.getHandle() + "\nNo. of Endorsements: " + postToShow.getNumberOfEndorsements() + "| No. of Comments: " + postToShow.getNumberOfComments() + "\n" + postToShow.getMessage();
     }
 
-    @Override
     public StringBuilder showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder stringToShow = new StringBuilder();
         Post postToShow = null;
         for (Post post : posts) {
             if (post.getPostId() == id) {
@@ -311,25 +311,19 @@ public class SocialMedia implements SocialMediaPlatform {
         if (postToShow instanceof Endorsement) {
             throw new NotActionablePostException("Endorsement posts do not have children.");
         }
-        sb.append(String.format("ID: %d\n", postToShow.getPostId()));
-        sb.append(String.format("Account: %s\n", postToShow.getHandle()));
-        sb.append(String.format("No. of Endorsements: %d | No. of Comments: %d\n", postToShow.getEndorsements().size(), postToShow.getComments().size()));
-        sb.append(String.format("%s\n", postToShow.getMessage()));
-        List<Comment> comments = postToShow.getComments();
-        if (!comments.isEmpty()) {
-            for (Comment reply : comments) {
-                sb.append(String.format("\t|\n\t> ID: %d\n", reply.getPostId()));
-                sb.append(String.format("\t\tAccount: %s\n", reply.getHandle()));
-                sb.append(String.format("\t\tNo. of Endorsements: %d | No. of Comments: %d\n", reply.getEndorsements().size(), reply.getComments().size()));
-                sb.append(String.format("\t\t%s\n", reply.getMessage()));
-                List<Comment> children = reply.getComments();
-                if (!children.isEmpty()) {
-                    sb.append(showPostChildrenDetails(reply.getPostId()).insert(0, "\t"));
-                }
+        stringToShow.append(showIndividualPost(postToShow.getPostId())).append("\n");
+
+        List<Comment> childPosts = postToShow.getComments();
+        if (!childPosts.isEmpty()) {
+            for (Comment childPost : childPosts) {
+                stringToShow.append("| \n");
+                stringToShow.append("| > ").append(showPostChildrenDetails(childPost.getPostId()).toString().trim().replace("\n", "\n   ")).append("\n");
             }
         }
-        return sb;
+
+        return stringToShow;
     }
+
 
 
 
@@ -417,9 +411,9 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            profiles = (ArrayList<Account>) ois.readObject();
-            posts = (ArrayList<Post>) ois.readObject();
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename))) {
+            profiles = (ArrayList<Account>) inputStream.readObject();
+            posts = (ArrayList<Post>) inputStream.readObject();
         } catch (IOException e) {
             throw new IOException("Error reading file.", e);
         } catch (ClassNotFoundException e) {
