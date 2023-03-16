@@ -20,6 +20,10 @@ public class SocialMediaTests {
 
         System.out.println(platform.getTotalOriginalPosts());
 
+        platform.erasePlatform();
+
+        System.out.println(platform.getTotalOriginalPosts());
+
     }
 
 

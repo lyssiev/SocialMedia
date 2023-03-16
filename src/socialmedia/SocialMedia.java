@@ -3,6 +3,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 //TODO: make sure fits with java naming conventions
 //TODO: write 30 tests
@@ -398,13 +401,19 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public void erasePlatform() {
-        // TODO Auto-generated method stub
-
+        profiles.clear();
+        posts.clear();
     }
 
     @Override
     public void savePlatform(String filename) throws IOException {
-        // TODO Auto-generated method stub
+        // Create a file output stream and an object output stream to write to the file
+        FileOutputStream fileOut = new FileOutputStream(filename);
+        ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        objectOut.writeObject(profiles);
+        objectOut.writeObject(posts);
+        objectOut.close();
+        fileOut.close();
 
     }
 
