@@ -15,6 +15,8 @@ public class SocialMedia implements SocialMediaPlatform {
     public static ArrayList<Account> profiles = new ArrayList<>();
     public static ArrayList<Post> posts = new ArrayList<>();
 
+    public final static Post deletedPost = new Post("", "The original content was removed from the system and is no longer available.");
+
     @Override
     public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
 
@@ -206,8 +208,8 @@ public class SocialMedia implements SocialMediaPlatform {
         boolean postFound = false;
         for (Post post : account.getPosts()) {
             if (Objects.equals(post.getPostId(), id)) {
-                if (post instanceof Endorsement) {
-                    throw new NotActionablePostException("Endorsement posts are not endorsable.");
+                if (!post.getActionable()) {
+                    throw new NotActionablePostException("Endorsement posts or deleted posts are not endorsable.");
                 }
                 postFound = true;
                 postToEndorse = post;
@@ -245,8 +247,8 @@ public class SocialMedia implements SocialMediaPlatform {
         boolean postFound = false;
         for (Post post : posts) {
             if (Objects.equals(post.getPostId(), id)) {
-                if (post instanceof Endorsement) {
-                    throw new NotActionablePostException("Endorsement posts are not able to be commented.");
+                if (!post.getActionable()) {
+                    throw new NotActionablePostException("Endorsement posts or deleted posts are not able to be commented.");
                 }
                 postFound = true;
                 postToComment = post;
@@ -264,18 +266,29 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public void deletePost(int id) throws PostIDNotRecognisedException {
-        boolean found = false;
+        Post postToDelete = null;
         for (Post post : posts)
         {
             if (post.getPostId() == id)
             {
-                posts.remove(post);
-                found = true;
+                postToDelete = post;
             }
         }
-        if (!found)
+        if (postToDelete == null)
         {
             throw new PostIDNotRecognisedException("There is no post with that id to delete.");
+        }
+        else {
+            for (Comment comment : postToDelete.comments)
+            {
+                comment.setOriginalPostId(deletedPost.getPostId());
+            }
+            if (postToDelete instanceof Comment)
+            {
+                Post originalPost = ((Comment) postToDelete).getOriginalPost();
+                originalPost.comments.remove(postToDelete);
+            }
+            posts.remove(postToDelete);
         }
     }
 
@@ -293,7 +306,7 @@ public class SocialMedia implements SocialMediaPlatform {
         {
             throw new PostIDNotRecognisedException("There is no post with that ID to show.");
         }
-        return "ID: " + postToShow.getPostId() + "\nAccount: " + postToShow.getHandle() + "\nNo. of Endorsements: " + postToShow.getNumberOfEndorsements() + "| No. of Comments: " + postToShow.getNumberOfComments() + "\n" + postToShow.getMessage();
+        return "ID: " + postToShow.getPostId() + "\nAccount: " + postToShow.getHandle() + "\nNo. of Endorsements: " + postToShow.getNumberOfEndorsements() + " | No. of Comments: " + postToShow.getNumberOfComments() + "\n" + postToShow.getMessage();
     }
 
     public StringBuilder showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
@@ -301,23 +314,27 @@ public class SocialMedia implements SocialMediaPlatform {
         Post postToShow = null;
         for (Post post : posts) {
             if (post.getPostId() == id) {
+                if (!post.getActionable()) {
+                    throw new NotActionablePostException("Endorsement posts or deleted posts are not able to be shown.");
+                }
                 postToShow = post;
                 break;
             }
         }
+
         if (postToShow == null) {
             throw new PostIDNotRecognisedException("There is no post with that ID to show.");
-        }
-        if (postToShow instanceof Endorsement) {
-            throw new NotActionablePostException("Endorsement posts do not have children.");
         }
         stringToShow.append(showIndividualPost(postToShow.getPostId())).append("\n");
 
         List<Comment> childPosts = postToShow.getComments();
         if (!childPosts.isEmpty()) {
             for (Comment childPost : childPosts) {
-                stringToShow.append("| \n");
-                stringToShow.append("| > ").append(showPostChildrenDetails(childPost.getPostId()).toString().trim().replace("\n", "\n   ")).append("\n");
+                if (childPost != deletedPost)
+                {
+                    stringToShow.append("| \n");
+                    stringToShow.append("| > ").append(showPostChildrenDetails(childPost.getPostId()).toString().trim().replace("\n", "\n   ")).append("\n");
+                }
             }
         }
 
@@ -393,8 +410,12 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public void erasePlatform() {
+        Post post = new Post("reset", "reset"); //making a new post to use the method reset to reset the counter
+        post.reset(); //makes sure the variable "nextPostId" stays private
+        post = null; //removing the reference for JVM garbage collector
         profiles.clear();
         posts.clear();
+
     }
 
     @Override

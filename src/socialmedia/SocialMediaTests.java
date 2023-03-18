@@ -10,19 +10,24 @@ public class SocialMediaTests {
 
     public static SocialMedia platform = new SocialMedia();
     public static void main(String[] args) throws NotActionablePostException, PostIDNotRecognisedException, InvalidPostException, HandleNotRecognisedException, InvalidHandleException, IOException, ClassNotFoundException, IllegalHandleException {
-       // testStringBuilderThing();
-        createAccountTest();
+       testStringBuilderThing();
+       // createAccountTest();
     }
 
     public static void testStringBuilderThing() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
 
         platform.createAccount("alyssa");
         platform.createPost("alyssa", "first post!");
-        platform.commentPost("alyssa", 0, "first comment!");
-        platform.commentPost("alyssa", 0, "second comment!");
-        platform.commentPost("alyssa", 1, "first subcomment on first comment!");
+        platform.commentPost("alyssa", 1, "first comment!");
+        platform.commentPost("alyssa", 1, "second comment!");
+        platform.commentPost("alyssa", 2, "first subcomment on first comment!");
 
-        System.out.println(platform.showPostChildrenDetails(0));
+        for (Post post : SocialMedia.posts)
+        {
+            System.out.println("id: " + post.getPostId() + " message: " + post.getMessage());
+        }
+        platform.deletePost(2);
+        System.out.println(platform.showPostChildrenDetails(1));
 
 
     }

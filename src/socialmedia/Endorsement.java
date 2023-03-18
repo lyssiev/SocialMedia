@@ -6,6 +6,7 @@ public class Endorsement extends Post {
         public Endorsement(String handle, String message, int originalPostId) {
             super(handle, message);
             this.originalPostId = originalPostId;
+            this.actionable = false;
         }
 
         @Override
