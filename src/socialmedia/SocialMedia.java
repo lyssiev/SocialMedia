@@ -157,7 +157,7 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new HandleNotRecognisedException("Sorry, that handle is not found.");
         }
 
-        return "ID: \nHandle:" + account.getHandle() + " \nDescription:" + account.getDescription() + "\nPost count: " + (account.getPosts()).size() + "\nEndorse count:" + account.getNumberOfEndorsements();
+        return "ID: " + account.getId() + "\nHandle: " + account.getHandle() + " \nDescription: " + account.getDescription() + "\nPost count: " + (account.getPosts()).size() + "\nEndorse count: " + account.getNumberOfEndorsements();
 
     }
 @Override
@@ -192,32 +192,31 @@ public class SocialMedia implements SocialMediaPlatform {
     @Override
     public int endorsePost(String handle, int id) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException {
         Account account = null;
-        boolean found = false;
         for (Account profile : profiles) {
             if (Objects.equals(profile.getHandle(), (handle))) {
-                found = true;
                 account = profile;
             }
         }
-        if (!found) {
+        if (account == null) {
 
             throw new HandleNotRecognisedException("Sorry, that handle is not found.");
         }
 
         Post postToEndorse = null;
-        boolean postFound = false;
-        for (Post post : account.getPosts()) {
+        for (Post post : posts) {
             if (Objects.equals(post.getPostId(), id)) {
-                if (!post.getActionable()) {
-                    throw new NotActionablePostException("Endorsement posts or deleted posts are not endorsable.");
-                }
-                postFound = true;
                 postToEndorse = post;
             }
         }
-        if(!postFound){
+
+        if(postToEndorse == null){
             throw new PostIDNotRecognisedException("There is no post with that id.");
         }
+
+        if (!postToEndorse.getActionable()) {
+            throw new NotActionablePostException("Endorsement posts or deleted posts are not endorsable.");
+        }
+
         String message = "EP@" + handle + ": " + postToEndorse.getMessage();
         Endorsement newEndorsement = new Endorsement(handle, message, postToEndorse.getPostId());
         postToEndorse.addEndorsement(newEndorsement);
@@ -238,6 +237,7 @@ public class SocialMedia implements SocialMediaPlatform {
         for (Account profile : profiles) {
             if (Objects.equals(profile.getHandle(), (handle))) {
                 found = true;
+                break;
             }
         }
         if (!found) {
@@ -397,12 +397,14 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public int getMostEndorsedAccount() {
+        int numberOfEndorsements = 0;
         int id = 0;
         for (Account profile : profiles)
         {
-            if (profile.getNumberOfEndorsements() > id)
+            if (profile.getNumberOfEndorsements() > numberOfEndorsements)
             {
-                id = profile.getNumberOfEndorsements();
+                numberOfEndorsements = profile.getNumberOfEndorsements();
+                id = profile.getId();
             }
         }
         return id;
@@ -410,12 +412,19 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public void erasePlatform() {
+
+        Account account = new Account("reset");
+        account.reset();
+        account = null;
+
         Post post = new Post("reset", "reset"); //making a new post to use the method reset to reset the counter
         post.reset(); //makes sure the variable "nextPostId" stays private
         post = null; //removing the reference for JVM garbage collector
+
         profiles.clear();
         posts.clear();
 
+        posts.add(deletedPost);
     }
 
     @Override
@@ -432,6 +441,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
     @Override
     public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
+        posts.remove(deletedPost);
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename))) {
             profiles = (ArrayList<Account>) inputStream.readObject();
             posts = (ArrayList<Post>) inputStream.readObject();

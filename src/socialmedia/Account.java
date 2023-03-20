@@ -69,4 +69,9 @@ public class Account implements Serializable {
         return total;
     }
 
+    public void reset()
+    {
+        latestId = 0;
+    }
+
 }

@@ -10,8 +10,10 @@ public class SocialMediaTests {
 
     public static SocialMedia platform = new SocialMedia();
     public static void main(String[] args) throws NotActionablePostException, PostIDNotRecognisedException, InvalidPostException, HandleNotRecognisedException, InvalidHandleException, IOException, ClassNotFoundException, IllegalHandleException {
-       testStringBuilderThing();
-       // createAccountTest();
+        //testStringBuilderThing();
+        // createAccountTest();
+       saveEraseAndLoadPlatformTest();
+       getMostEndorsedAccountTest();
     }
 
     public static void testStringBuilderThing() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
@@ -47,6 +49,60 @@ public class SocialMediaTests {
 
     }
 
+    public static void getMostEndorsedAccountTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+        platform.createAccount("user1");
+        platform.createAccount("user2");
+        platform.createPost("user1", "first post!");
+        platform.createPost("user2", "second post!");
+        platform.endorsePost("user1", 1);
+        platform.endorsePost("user2", 1);
+        platform.endorsePost("user1", 2);
+
+        //for (Account profile : SocialMedia.profiles)
+        //{
+        // System.out.println(platform.showAccount(profile.getHandle()));
+        //}
+
+        assert platform.getMostEndorsedAccount() == 1; // account index starts at 0
+
+    }
+
+    public static void saveEraseAndLoadPlatformTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
+        platform.erasePlatform();
+
+        platform.createAccount("user1");
+        platform.createPost("user1", "first post!");
+        platform.createAccount("user2");
+        platform.createPost("user2", "second post!");
+        platform.commentPost("user2", 1, "comment on first post!"); // post indexing starts at 1 because of deleted posts
+        platform.endorsePost("user2", 1);
+
+        assert SocialMedia.profiles.size() == 2;
+        assert SocialMedia.posts.size() == 5; // 5 posts (2 original, 1 comment, 1 endorsement and the generic "deleted post")
+        assert platform.getTotalCommentPosts() == 1;
+        assert platform.getTotalEndorsmentPosts() == 1;
+        assert platform.getTotalOriginalPosts() == 3;
+
+        platform.savePlatform("save.ser");
+
+        platform.erasePlatform();
+
+        assert SocialMedia.profiles.size() == 0;
+        assert SocialMedia.posts.size() == 1; // deleted post
+        assert platform.getTotalCommentPosts() == 0;
+        assert platform.getTotalEndorsmentPosts() == 0;
+        assert platform.getTotalOriginalPosts() == 1; // deleted post
+
+        platform.loadPlatform("save.ser");
+
+        assert SocialMedia.profiles.size() == 2;
+        assert SocialMedia.posts.size() == 5; // 5 posts (2 original, 1 comment, 1 endorsement and the generic "deleted post")
+        assert platform.getTotalCommentPosts() == 1;
+        assert platform.getTotalEndorsmentPosts() == 1;
+        assert platform.getTotalOriginalPosts() == 3;
+
+    }
 
 
 }

@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07e1bcbe-368b-4910-b0b1-4cba39cf2b10" name="Changes" comment="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
+      <change afterPath="$PROJECT_DIR$/save.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/socialmedia/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/Comment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/socialmedia/Endorsement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/Endorsement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/socialmedia/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/socialmedia/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/Post.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/socialmedia/SocialMedia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/SocialMedia.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/socialmedia/SocialMediaTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/SocialMediaTests.java" afterDir="false" />
@@ -275,7 +275,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678986028062</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)">
+      <created>1679097850599</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1679097850599</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
