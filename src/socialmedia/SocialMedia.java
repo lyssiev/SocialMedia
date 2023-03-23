@@ -17,6 +17,11 @@ public class SocialMedia implements SocialMediaPlatform {
 
     public final static Post deletedPost = new Post("", "The original content was removed from the system and is no longer available.");
 
+    public SocialMedia()
+    {
+        posts.add(deletedPost);
+        deletedPost.setActionable(false);
+    }
     @Override
     public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
 
@@ -67,6 +72,13 @@ public class SocialMedia implements SocialMediaPlatform {
         }
         else {
             profiles.remove(accountToDelete);
+            for (Post post : posts)
+            {
+                if (Objects.equals(post.getHandle(), accountToDelete.getHandle()))
+                {
+                    posts.remove(post);
+                }
+            }
         }
 
     }
@@ -88,6 +100,13 @@ public class SocialMedia implements SocialMediaPlatform {
         }
         else {
             profiles.remove(accountToDelete);
+            for (Post post : posts)
+            {
+                if (Objects.equals(post.getHandle(), accountToDelete.getHandle()))
+                {
+                    posts.remove(post);
+                }
+            }
         }
 
     }
@@ -342,8 +361,6 @@ public class SocialMedia implements SocialMediaPlatform {
     }
 
 
-
-
     @Override
     public int getNumberOfAccounts() {
        return profiles.size();
@@ -359,7 +376,7 @@ public class SocialMedia implements SocialMediaPlatform {
                 total = total + 1;
             }
         }
-        return posts.size() - total;
+        return posts.size() - 1 - total; //deleted post is extra
     }
 
     @Override
@@ -367,7 +384,10 @@ public class SocialMedia implements SocialMediaPlatform {
         int total = 0;
         for (Post post : posts)
         {
-            total = total + post.getNumberOfEndorsements();
+            if (post instanceof Endorsement)
+            {
+                total = total + 1;
+            }
         }
         return total;
     }
@@ -377,7 +397,10 @@ public class SocialMedia implements SocialMediaPlatform {
         int total = 0;
         for (Post post : posts)
         {
-            total = total + post.getNumberOfComments();
+            if (post instanceof Comment)
+            {
+                total = total + 1;
+            }
         }
         return total;
     }
@@ -385,10 +408,12 @@ public class SocialMedia implements SocialMediaPlatform {
     @Override
     public int getMostEndorsedPost() {
         int id = 0;
+        int mostEndorsements = 0;
         for (Post post : posts)
         {
-            if (post.getPostId() > id)
+            if (post.getNumberOfEndorsements() > mostEndorsements)
             {
+                mostEndorsements = post.getNumberOfEndorsements();
                 id = post.getPostId();
             }
         }

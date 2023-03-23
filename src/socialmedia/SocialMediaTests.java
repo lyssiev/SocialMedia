@@ -10,26 +10,89 @@ public class SocialMediaTests {
 
     public static SocialMedia platform = new SocialMedia();
     public static void main(String[] args) throws NotActionablePostException, PostIDNotRecognisedException, InvalidPostException, HandleNotRecognisedException, InvalidHandleException, IOException, ClassNotFoundException, IllegalHandleException {
-        //testStringBuilderThing();
+        showPostChildrenDetailsTest();
         // createAccountTest();
-       saveEraseAndLoadPlatformTest();
-       getMostEndorsedAccountTest();
+        getNumberOfProfilesTest();
+        getTotalOriginalPostsTest();
+        getTotalEndorsementPostsTest();
+        getTotalCommentPostsTest();
+        saveEraseAndLoadPlatformTest();
+        getMostEndorsedAccountAndPostTest();
     }
 
-    public static void testStringBuilderThing() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
+    public static void showPostChildrenDetailsTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
 
         platform.createAccount("alyssa");
         platform.createPost("alyssa", "first post!");
         platform.commentPost("alyssa", 1, "first comment!");
         platform.commentPost("alyssa", 1, "second comment!");
         platform.commentPost("alyssa", 2, "first subcomment on first comment!");
+        platform.endorsePost("alyssa", 1);
 
-        for (Post post : SocialMedia.posts)
-        {
-            System.out.println("id: " + post.getPostId() + " message: " + post.getMessage());
+
+        String expectedOutput = ("ID: 2\n" +
+                "Account: alyssa\n" +
+                "No. of Endorsements: 0 | No. of Comments: 1\n" +
+                "first comment!\n" +
+                "| \n" +
+                "| > ID: 4\n" +
+                "   Account: alyssa\n" +
+                "   No. of Endorsements: 0 | No. of Comments: 0\n" +
+                "   first subcomment on first comment!\n");
+
+        String realOutput = platform.showPostChildrenDetails(2).toString();
+        assert (Objects.equals(realOutput, expectedOutput));
+
+        expectedOutput = "ID: 1\n" +
+                "Account: alyssa\n" +
+                "No. of Endorsements: 1 | No. of Comments: 2\n" +
+                "first post!\n" +
+                "| \n" +
+                "| > ID: 2\n" +
+                "   Account: alyssa\n" +
+                "   No. of Endorsements: 0 | No. of Comments: 1\n" +
+                "   first comment!\n" +
+                "   | \n" +
+                "   | > ID: 4\n" +
+                "      Account: alyssa\n" +
+                "      No. of Endorsements: 0 | No. of Comments: 0\n" +
+                "      first subcomment on first comment!\n" +
+                "| \n" +
+                "| > ID: 3\n" +
+                "   Account: alyssa\n" +
+                "   No. of Endorsements: 0 | No. of Comments: 0\n" +
+                "   second comment!\n";
+
+        realOutput = platform.showPostChildrenDetails(1).toString();
+        assert (Objects.equals(realOutput, expectedOutput));
+
+
+        try {
+            platform.showPostChildrenDetails(5); // id of endorsement post created
+            throw new AssertionError("Test failed");
         }
-        platform.deletePost(2);
-        System.out.println(platform.showPostChildrenDetails(1));
+        catch (NotActionablePostException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.NotActionablePostException: Endorsement posts or deleted posts are not able to be shown."));
+        }
+
+        try {
+            platform.showPostChildrenDetails(0); // id of the generic deleted post
+            throw new AssertionError("Test failed");
+        }
+        catch (NotActionablePostException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.NotActionablePostException: Endorsement posts or deleted posts are not able to be shown."));
+        }
+
+        try {
+            platform.showPostChildrenDetails(6); // id of a post that doesn't exist
+            throw new AssertionError("Test failed");
+        }
+        catch (PostIDNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.PostIDNotRecognisedException: There is no post with that ID to show."));
+        }
 
 
     }
@@ -49,7 +112,75 @@ public class SocialMediaTests {
 
     }
 
-    public static void getMostEndorsedAccountTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
+
+    public static void getNumberOfProfilesTest() throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
+        platform.erasePlatform();
+        platform.createAccount("user1");
+
+        assert platform.getNumberOfAccounts() == 1;
+
+        platform.createAccount("user2");
+
+        assert platform.getNumberOfAccounts() == 2;
+
+        platform.removeAccount("user1");
+
+        assert platform.getNumberOfAccounts() == 1;
+    }
+    public static void getTotalOriginalPostsTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+
+        platform.createAccount("user1");
+        platform.createPost("user1", "test");
+        assert platform.getTotalOriginalPosts() == 1;
+
+        platform.endorsePost("user1", 1);
+
+        assert platform.getTotalOriginalPosts() == 1;
+
+        platform.createPost("user1", "test 2");
+
+        assert platform.getTotalOriginalPosts() == 2;
+    }
+
+
+    public static void getTotalEndorsementPostsTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+
+        platform.createAccount("user1");
+        platform.createPost("user1", "test");
+
+        platform.endorsePost("user1", 1);
+
+        assert platform.getTotalEndorsmentPosts() == 1;
+
+        platform.commentPost("user1", 1, "test comment 1");
+
+        assert platform.getTotalEndorsmentPosts() == 1;
+
+        platform.endorsePost("user1", 1);
+
+        assert platform.getTotalEndorsmentPosts() == 2;
+    }
+
+    public static void getTotalCommentPostsTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+
+        platform.createAccount("user1");
+        platform.createPost("user1", "test");
+
+        platform.commentPost("user1", 1, "test comment 1");
+
+        assert platform.getTotalCommentPosts() == 1;
+
+        platform.commentPost("user1", 1, "test comment 2");
+
+        assert platform.getTotalCommentPosts() == 2;
+
+    }
+
+
+    public static void getMostEndorsedAccountAndPostTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
         platform.erasePlatform();
         platform.createAccount("user1");
         platform.createAccount("user2");
@@ -64,7 +195,8 @@ public class SocialMediaTests {
         // System.out.println(platform.showAccount(profile.getHandle()));
         //}
 
-        assert platform.getMostEndorsedAccount() == 1; // account index starts at 0
+        assert platform.getMostEndorsedAccount() == 1; // first account has an ID of 1
+        assert platform.getMostEndorsedPost() == 1; // first (most commented) post has an ID of 1
 
     }
 
@@ -82,7 +214,7 @@ public class SocialMediaTests {
         assert SocialMedia.posts.size() == 5; // 5 posts (2 original, 1 comment, 1 endorsement and the generic "deleted post")
         assert platform.getTotalCommentPosts() == 1;
         assert platform.getTotalEndorsmentPosts() == 1;
-        assert platform.getTotalOriginalPosts() == 3;
+        assert platform.getTotalOriginalPosts() == 2; // not including deleted post
 
         platform.savePlatform("save.ser");
 
@@ -92,7 +224,7 @@ public class SocialMediaTests {
         assert SocialMedia.posts.size() == 1; // deleted post
         assert platform.getTotalCommentPosts() == 0;
         assert platform.getTotalEndorsmentPosts() == 0;
-        assert platform.getTotalOriginalPosts() == 1; // deleted post
+        assert platform.getTotalOriginalPosts() == 0; // not including deleted post
 
         platform.loadPlatform("save.ser");
 
@@ -100,7 +232,7 @@ public class SocialMediaTests {
         assert SocialMedia.posts.size() == 5; // 5 posts (2 original, 1 comment, 1 endorsement and the generic "deleted post")
         assert platform.getTotalCommentPosts() == 1;
         assert platform.getTotalEndorsmentPosts() == 1;
-        assert platform.getTotalOriginalPosts() == 3;
+        assert platform.getTotalOriginalPosts() == 2; // not including deleted post
 
     }
 

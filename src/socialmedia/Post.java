@@ -19,9 +19,6 @@ public class Post implements Serializable {
         this.message = message;
         this.comments = new ArrayList<>();
         this.endorsements = new ArrayList<>();
-        if (Objects.equals(this.handle, "")) {
-            actionable = false;
-        }
     }
 
     public int getPostId() {
@@ -58,6 +55,11 @@ public class Post implements Serializable {
     public int getNumberOfComments()
     {
         return comments.size();
+    }
+
+    public void setActionable(boolean actionable)
+    {
+        this.actionable = actionable;
     }
 
     public boolean getActionable()
