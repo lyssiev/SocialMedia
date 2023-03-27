@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 //TODO: make sure fits with java naming conventions
-//TODO: write 30 tests
+//TODO: comments, javadocs
 public class SocialMedia implements SocialMediaPlatform {
 
     public static ArrayList<Account> profiles = new ArrayList<>();

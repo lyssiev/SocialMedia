@@ -3,9 +3,6 @@ import java.io.*;
 import java.util.Objects;
 
 
-//TODO: make sure when deleting account, all comments and endorsements also removed
-//TODO: make sure that the outputting works of the tree of comments on a post
-//TODO: check that when posts removed they are formatted correctly and error messages work correctly
 public class SocialMediaTests {
 
     public static SocialMedia platform = new SocialMedia();
