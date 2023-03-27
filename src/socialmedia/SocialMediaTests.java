@@ -10,8 +10,12 @@ public class SocialMediaTests {
 
     public static SocialMedia platform = new SocialMedia();
     public static void main(String[] args) throws NotActionablePostException, PostIDNotRecognisedException, InvalidPostException, HandleNotRecognisedException, InvalidHandleException, IOException, ClassNotFoundException, IllegalHandleException {
+        createPostTest();
+        endorsePostTest();
+        commentPostTest();
+        deletePostTest();
+        showIndividualPostTest();
         showPostChildrenDetailsTest();
-        // createAccountTest();
         getNumberOfProfilesTest();
         getTotalOriginalPostsTest();
         getTotalEndorsementPostsTest();
@@ -20,7 +24,180 @@ public class SocialMediaTests {
         getMostEndorsedAccountAndPostTest();
     }
 
+
+    public static void createPostTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException {
+        platform.createAccount("alyssa");
+        platform.createPost("alyssa", "first post!");
+        assert platform.getTotalOriginalPosts() == 1;
+        assert Objects.equals(SocialMedia.posts.get(1).getMessage(), "first post!");
+
+        try {
+            platform.createPost("alyssa", ""); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (InvalidPostException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.InvalidPostException: Sorry, the post is invalid. Make sure it is not empty or does not have more than 100 characters."));
+        }
+
+        try {
+            platform.createPost("", "post test"); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (HandleNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.HandleNotRecognisedException: Sorry, that handle is not found."));
+        }
+
+    }
+
+    public static void endorsePostTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+
+        platform.createAccount("alyssa");
+        platform.createPost("alyssa", "first post!");
+        platform.endorsePost("alyssa", 1);
+
+
+        assert platform.getTotalEndorsmentPosts() == 1;
+
+        try {
+            platform.endorsePost("a", 1); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (HandleNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.HandleNotRecognisedException: Sorry, that handle is not found."));
+        }
+
+        try {
+            platform.endorsePost("alyssa", 0); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (NotActionablePostException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.NotActionablePostException: Endorsement posts or deleted posts are not endorsable."));
+        }
+
+        try {
+            platform.endorsePost("alyssa", 0); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (NotActionablePostException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.NotActionablePostException: Endorsement posts or deleted posts are not endorsable."));
+        }
+
+        try {
+            platform.endorsePost("alyssa", 3); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (PostIDNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.PostIDNotRecognisedException: There is no post with that id."));
+        }
+
+    }
+
+
+    public static void commentPostTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+
+        platform.createAccount("alyssa");
+        platform.createPost("alyssa", "first post!");
+
+        platform.commentPost("alyssa", 1, "comment");
+
+        assert Objects.equals(SocialMedia.posts.get(1).getComments().get(0).getMessage(), "comment");
+
+        try {
+            platform.commentPost("alyssa", 1, ""); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (InvalidPostException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.InvalidPostException: Sorry, the post is invalid. Make sure it is not empty or does not have more than 100 characters."));
+        }
+
+        try {
+            platform.commentPost("alyssa", 3, "comment"); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (PostIDNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.PostIDNotRecognisedException: There is no post with that id."));
+        }
+
+        try {
+            platform.commentPost("a", 1, "comment"); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (HandleNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.HandleNotRecognisedException: Sorry, that handle is not found."));
+        }
+
+        try {
+            platform.commentPost("alyssa", 0, "comment"); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (NotActionablePostException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.NotActionablePostException: Endorsement posts or deleted posts are not able to be commented."));
+        }
+
+    }
+    public static void deletePostTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+
+        platform.createAccount("alyssa");
+        platform.createPost("alyssa", "first post!");
+        platform.createPost("alyssa", "second post!");
+
+        assert platform.getTotalOriginalPosts() == 2;
+
+        platform.deletePost(1);
+
+        assert platform.getTotalOriginalPosts() == 1;
+
+        try {
+            platform.deletePost(3); // id does not exist
+            throw new AssertionError("Test failed");
+        }
+        catch (PostIDNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.PostIDNotRecognisedException: There is no post with that id to delete."));
+        }
+
+    }
+
+    public static void showIndividualPostTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, PostIDNotRecognisedException {
+        platform.erasePlatform();
+
+        platform.createAccount("alyssa");
+        platform.createPost("alyssa", "first post!");
+        try {
+            platform.showIndividualPost(2); // id of a deleted post
+            throw new AssertionError("Test failed");
+        }
+        catch (PostIDNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.PostIDNotRecognisedException: There is no post with that ID to show."));
+        }
+
+        String expectedOutput = "ID: 1\n" +
+                "Account: alyssa\n" +
+                "No. of Endorsements: 0 | No. of Comments: 0\n" +
+                "first post!";
+
+        String realOutput = platform.showIndividualPost(1).toString();
+
+        assert (Objects.equals(realOutput, expectedOutput));
+
+    }
+
     public static void showPostChildrenDetailsTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException, NotActionablePostException, PostIDNotRecognisedException, IOException, ClassNotFoundException {
+        platform.erasePlatform();
 
         platform.createAccount("alyssa");
         platform.createPost("alyssa", "first post!");
@@ -66,6 +243,29 @@ public class SocialMediaTests {
         realOutput = platform.showPostChildrenDetails(1).toString();
         assert (Objects.equals(realOutput, expectedOutput));
 
+        platform.deletePost(2);
+
+        expectedOutput = "ID: 1\n" +
+                "Account: alyssa\n" +
+                "No. of Endorsements: 1 | No. of Comments: 1\n" +
+                "first post!\n" +
+                "| \n" +
+                "| > ID: 3\n" +
+                "   Account: alyssa\n" +
+                "   No. of Endorsements: 0 | No. of Comments: 0\n" +
+                "   second comment!\n";
+
+        realOutput = platform.showPostChildrenDetails(1).toString();
+        assert (Objects.equals(realOutput, expectedOutput));
+
+        try {
+            platform.showPostChildrenDetails(2); // id of a deleted post
+            throw new AssertionError("Test failed");
+        }
+        catch (PostIDNotRecognisedException e)
+        {
+            assert (Objects.equals(e.toString(), "socialmedia.PostIDNotRecognisedException: There is no post with that ID to show."));
+        }
 
         try {
             platform.showPostChildrenDetails(5); // id of endorsement post created
@@ -96,22 +296,6 @@ public class SocialMediaTests {
 
 
     }
-
-    public static void createAccountTest() throws IllegalHandleException, InvalidHandleException {
-        platform.createAccount("user1");
-        assert SocialMedia.profiles.size() == 1 : "the number of accounts should be 1";
-
-        try {
-            platform.createAccount("user1");
-            throw new AssertionError("Test failed");
-        }
-        catch (IllegalHandleException e)
-        {
-            assert (Objects.equals(e.toString(), "socialmedia.IllegalHandleException: Handle already taken, please try again."));
-        }
-
-    }
-
 
     public static void getNumberOfProfilesTest() throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
         platform.erasePlatform();
