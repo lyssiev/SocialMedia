@@ -1,12 +1,17 @@
 package socialmedia;
 
 public class Endorsement extends Post {
-        private int originalPostId;
+        private final int originalPostId;
 
         public Endorsement(String handle, String message, int originalPostId) {
             super(handle, message);
             this.originalPostId = originalPostId;
             this.actionable = false;
+        }
+
+        public int getOriginalPostId()
+        {
+            return originalPostId;
         }
 
         @Override

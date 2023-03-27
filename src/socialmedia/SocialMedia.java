@@ -302,6 +302,16 @@ public class SocialMedia implements SocialMediaPlatform {
             {
                 comment.setOriginalPostId(deletedPost.getPostId());
             }
+            for (Post endorsement : posts)
+            {
+                if (endorsement instanceof Endorsement)
+                {
+                    if (postToDelete.getPostId() == ((Endorsement) endorsement).getOriginalPostId())
+                    {
+                        posts.remove(endorsement);
+                    }
+                }
+            }
             if (postToDelete instanceof Comment)
             {
                 Post originalPost = ((Comment) postToDelete).getOriginalPost();

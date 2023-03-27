@@ -26,6 +26,8 @@ public class SocialMediaTests {
 
 
     public static void createPostTest() throws IllegalHandleException, InvalidHandleException, InvalidPostException, HandleNotRecognisedException {
+        platform.erasePlatform();
+
         platform.createAccount("alyssa");
         platform.createPost("alyssa", "first post!");
         assert platform.getTotalOriginalPosts() == 1;

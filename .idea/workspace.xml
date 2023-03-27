@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07e1bcbe-368b-4910-b0b1-4cba39cf2b10" name="Changes" comment="updating tests (specifically testing showChildrenPost method)">
-      <change afterPath="$PROJECT_DIR$/save.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/socialmedia/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/socialmedia/SocialMediaTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/SocialMediaTests.java" afterDir="false" />
+    <list default="true" id="07e1bcbe-368b-4910-b0b1-4cba39cf2b10" name="Changes" comment="updated tests all finished (alyssa)">
+      <change beforePath="$PROJECT_DIR$/src/socialmedia/Endorsement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/Endorsement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/socialmedia/SocialMedia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socialmedia/SocialMedia.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -291,7 +289,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679615583745</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="updated tests all finished (alyssa)">
+      <created>1679878434257</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1679878434257</updated>
+    </task>
+    <task id="LOCAL-00026" summary="updated tests all finished (alyssa)">
+      <created>1679878573282</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1679878573282</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -323,7 +335,8 @@
     <MESSAGE value="Added exceptions files and interfaces given in project spec" />
     <MESSAGE value="Added exceptions files and interfaces given in project spec (changed location to socialmedia package)" />
     <MESSAGE value="updating tests (specifically testing showChildrenPost method)" />
-    <option name="LAST_COMMIT_MESSAGE" value="updating tests (specifically testing showChildrenPost method)" />
+    <MESSAGE value="updated tests all finished (alyssa)" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated tests all finished (alyssa)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
