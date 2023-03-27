@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Post implements Serializable {
 
     /**
-     * Static variable to keep track of the next post id.
+     *  Variable keeping track of the next post id.
      */
     private static int nextPostId = 0;
 
@@ -29,17 +29,17 @@ public class Post implements Serializable {
     private final String message;
 
     /**
-     * List of comments received by this post.
+     * ArrayList of comments received by this post.
      */
     protected ArrayList<Comment> comments;
 
     /**
-     * List of endorsements received by this post.
+     * ArrayList of endorsements received by this post.
      */
     protected ArrayList<Endorsement> endorsements;
 
     /**
-     * Indicates whether this post is actionable or not.
+     * Shows whether this post is actionable or not.
      */
     protected boolean actionable = true;
 
@@ -85,9 +85,9 @@ public class Post implements Serializable {
     }
 
     /**
-     * Returns a list of comments received by this post.
+     * Returns an arraylist of comments received by this post.
      *
-     * @return The list of comments.
+     * @return The arraylist of comments.
      */
     public ArrayList<Comment> getComments() {
         return comments;
@@ -148,7 +148,7 @@ public class Post implements Serializable {
     }
 
     /**
-     * Resets the static variable nextPostId to 1.
+     * Resets the static variable nextPostId to 1, used in resetting the platform.
      */
     public void reset()
     {
