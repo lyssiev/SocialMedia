@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
+ * @author Student numbers: 720027904, 720050952
+ * @version 1.0
+ *
  * Represents a post in the UoK social media platform.
  */
 public class Post implements Serializable {
