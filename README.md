@@ -15,10 +15,3 @@ Accounts have a unique numerical identifier, but also a unique string handle to 
 
 The UoK wants the back-end of the new social media platform to be compatible with the front-end which is being developed by another group, as such they have already designed a Java interface for the new system, which their frontend application will use. You are to develop a class that implements this interface, and also develop the necessary additional supporting classes in the Java package called socialmedia.
 
-## Getting Started
-To get started with the project, follow these steps:
-
-- Clone the repository
-- Install the necessary dependencies
-- Run the project
-
