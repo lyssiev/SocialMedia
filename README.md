@@ -2,7 +2,7 @@
 ECM1410 - Object Oriented Programming Coursework - Written in Java
 Grade: 62%, 2:1
 
-_This project was for my Object Oriented Programming course at Uni of Exeter. In this project I demonstrated my understanding of classes, inherited classes and objects whilst improved my skills in unit testing and pair programming._
+_This project was for my Object Oriented Programming course at Uni of Exeter. In this project I demonstrated my understanding of classes, inherited classes and objects whilst improving my skills in unit testing and pair programming._
 
 ## Description
 **given by "University of Knowledge"**
